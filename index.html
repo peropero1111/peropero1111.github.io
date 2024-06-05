@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>게시판</title>
+    <style>
+        /* 기존 스타일 정의 */
+        :root {
+            --background-color: #ffffff;
+            --text-color: #000000;
+            --border-color: #ddd;
+        }
+        [data-theme="dark"] {
+            --background-color: #121212;
+            --text-color: #ffffff;
+            --border-color: #333;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: var(--background-color);
+            color: var(--text-color);
+        }
+        form {
+            margin-bottom: 20px;
+        }
+        textarea {
+            width: 100%;
+            height: 100px;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            background: var(--background-color);
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 1px solid var(--border-color);
+        }
+        .warning {
+            font-size: 0.9em;
+            color: #888;
+        }
+        .mode-toggle {
+            margin-bottom: 20px;
+        }
+    </style>
+    <!-- Firebase App (the core Firebase SDK) -->
+    <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-app.js"></script>
+    <!-- Firebase Realtime Database -->
+    <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-database.js"></script>
+    <!-- Firebase Storage -->
+    <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-storage.js"></script>
+    <script>
+        // Firebase 설정 객체를 여기에 넣으세요
+        var firebaseConfig = {
+            apiKey: "AIzaSyDqUOKt2J4GdLEd2_EnHZClEaKQOaPjvmE",
+            authDomain: "molru-d530b.firebaseapp.com",
+            databaseURL: "https://molru-d530b-default-rtdb.firebaseio.com",
+            projectId: "molru-d530b",
+            storageBucket: "molru-d530b.appspot.com",
+            messagingSenderId: "853380240146",
+            appId: "1:853380240146:web:27b558d20f75dae60d19cb"
+        };
+        // Firebase 초기화
+        firebase.initializeApp(firebaseConfig);
+        var database = firebase.database();
+        var storage = firebase.storage();
+
+        // 모드 전환 함수
+        function toggleMode() {
+            const currentTheme = document.documentElement.getAttribute("data-theme");
+            const newTheme = currentTheme === "dark" ? "light" : "dark";
+            document.documentElement.setAttribute("data-theme", newTheme);
+            localStorage.setItem("theme", newTheme);
+        }
+
+        // 페이지 로드 시 저장된 테마를 적용
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const savedTheme = localStorage.getItem("theme") || "light";
+            document.documentElement.setAttribute("data-theme", savedTheme);
+            loadPosts();
+        });
+    </script>
+</head>
+<body>
+    <h1>게시판</h1>
+    <p class="warning">한번 작성한 글은 지울 수 없으니 타인의 명예를 훼손하는 글이나 욕설은 적지 말아주십시오.</p>
+    <button class="mode-toggle" onclick="toggleMode()">모드 전환</button>
+    <form id="postForm">
+        <label for="nickname">닉네임:</label><br>
+        <input type="text" id="nickname" name="nickname" required><br>
+        <label for="content">내용:</label><br>
+        <textarea id="content" name="content" required></textarea><br>
+        <label for="file">파일 업로드 (PNG, MP3, MP4):</label><br>
+        <input type="file" id="file" name="file" accept=".png, .mp3, .mp4"><br>
+        <button type="submit">글 작성</button>
+    </form>
+    <hr>
+    <h2>작성된 글</h2>
+    <ul id="posts"></ul>
+
+    <script>
+        document.getElementById('postForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            let nickname = document.getElementById('nickname').value;
+            let content = document.getElementById('content').value;
+            let file = document.getElementById('file').files[0];
+
+            if (file) {
+                uploadFile(file, nickname, content);
+            } else {
+                savePost(nickname, content, null);
+            }
+
+            document.getElementById('nickname').value = '';
+            document.getElementById('content').value = '';
+            document.getElementById('file').value = '';
+        });
+
+        function uploadFile(file, nickname, content) {
+            let storageRef = storage.ref('uploads/' + file.name);
+            storageRef.put(file).then((snapshot) => {
+                snapshot.ref.getDownloadURL().then((downloadURL) => {
+                    savePost(nickname, content, downloadURL);
+                });
+            });
+        }
+
+        function savePost(nickname, content, fileURL) {
+            let newPostKey = database.ref().child('posts').push().key;
+            database.ref('posts/' + newPostKey).set({
+                nickname: nickname,
+                content: content,
+                fileURL: fileURL,
+                fileName: fileURL ? fileURL.split('/').pop().split('#')[0].split('?')[0] : null,
+                timestamp: firebase.database.ServerValue.TIMESTAMP
+            });
+        }
+
+        function loadPosts() {
+            database.ref('posts').orderByChild('timestamp').on('value', (snapshot) => {
+                let postsList = document.getElementById('posts');
+                postsList.innerHTML = '';
+                let posts = [];
+                snapshot.forEach((childSnapshot) => {
+                    let post = childSnapshot.val();
+                    let postHTML = `<li><strong>${post.nickname}:</strong> ${post.content}`;
+                    if (post.fileURL) {
+                        postHTML += `<br><a href="${post.fileURL}" target="_blank">${post.fileName}</a>`;
+                    }
+                    postHTML += `</li>`;
+                    posts.push(postHTML);
+                });
+                posts.reverse().forEach((post) => {
+                    postsList.innerHTML += post;
+                });
+            });
+        }
+    </script>
+</body>
+</html>
