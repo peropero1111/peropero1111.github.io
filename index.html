@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <title></title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+        }
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 100;
+            max-width: 4000px;
+            box-sizing: border-box;
+        }
+        h1 {
+            text-align: center;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        label, select, button {
+            margin-bottom: 10px;
+            font-size: 1.2em;
+        }
+        button {
+            padding: 10px;
+            background-color: lightpink;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: rgba(255, 182, 193, 0.822);
+        }
+    </style>
+    <script>
+        function submitForm() {
+            var grade = document.getElementById("grade").value;
+            var classNum = document.getElementById("class").value;
+
+            var url = "";
+
+            if (grade == "2" && classNum == "1") {
+                url = "https://class2-1.netlify.app";
+            } else if (grade == "2" && classNum == "2") {
+                url = "https://class2-2.netlify.app";
+            } else if (grade == "2" && classNum == "3") {
+                url = "https://class2-3.netlify.app";
+            } else if (grade == "2" && classNum == "4") {
+                url = "https://class2-4.netlify.app";
+            } else if (grade == "2" && classNum == "5") {
+                url = "https://class2-5.netlify.app";
+            } else if (grade == "2" && classNum == "6") {
+                url = "https://class2-6.netlify.app";
+            } else if (grade == "2" && classNum == "7") {
+                url = "https://class2-7.netlify.app";
+            } else if (grade == "2" && classNum == "8") {
+                url = "https://class2-8.netlify.app";
+            } else if (grade == "2" && classNum == "9") {
+                url = "https://class2-9.netlify.app";
+            } else {
+                url = "https://example.com/default";
+            }
+
+            window.location.href = url;
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>학년과 반을 선택해주세요</h1>
+        <h2>서버 유지 문제로 2학년만을 대상으로 진행 됩니다</h2>
+        <form onsubmit="submitForm(); return false;">
+            <label for="grade">학년:</label>
+            <select id="grade" name="grade">
+                <option value="1">1학년</option>
+                <option value="2">2학년</option>
+                <option value="3">3학년</option>
+            </select>
+            <label for="class">반:</label>
+            <select id="class" name="class">
+                <option value="1">1반</option>
+                <option value="2">2반</option>
+                <option value="3">3반</option>
+                <option value="4">4반</option>
+                <option value="5">5반</option>
+                <option value="6">6반</option>
+                <option value="7">7반</option>
+                <option value="8">8반</option>
+                <option value="9">9반</option>
+            </select>
+            <button type="submit">제출</button>
+        </form>
+    </div>
+    <script>
+        // 온라인 오디오 파일을 오디오 객체로 생성
+        const audio = new Audio('https://drive.google.com/uc?export=download&id=1lyzSoDqjSaHUU4mGdO18XHyJAULO3AMs');
+
+        // 현재 입력된 키를 저장할 배열
+        let inputSequence = [];
+
+        // 올바른 키 입력 시 오디오 재생 함수
+        function playAudio() {
+            const keySequence = ['s', 'i', 'k', 'a'];
+            // 입력된 키 시퀀스와 올바른 시퀀스를 비교
+            if (inputSequence.join('') === keySequence.join('')) {
+                // 오디오 파일 재생
+                audio.play();
+                // 시퀀스 초기화
+                inputSequence = [];
+            }
+        }
+
+        // 키 입력 이벤트 리스너
+        document.addEventListener('keydown', function(event) {
+            const key = event.key.toLowerCase();
+            if (['s', 'i', 'k', 'a'].includes(key)) {
+                inputSequence.push(key);
+                // 올바른 키 시퀀스 길이만큼 자르기
+                if (inputSequence.length > 4) {
+                    inputSequence.shift();
+                }
+                playAudio();
+            }
+        });
+    </script>
+</body>
+</html>
