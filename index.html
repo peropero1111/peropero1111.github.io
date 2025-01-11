@@ -2,54 +2,70 @@
 <html lang="en">
 <head>
     <title></title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background-color: #f0f0f0;
-        }
-        .container {
-            background-color: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            width: 100%;
-            max-width: 400px;
-            box-sizing: border-box;
-        }
-        h1, h2, h4 {
-            text-align: center;
-        }
-        form {
-            display: flex;
-            flex-direction: column;
-        }
-        label, select, button {
-            margin-bottom: 10px;
-            font-size: 1.2em;
-        }
-        button {
-            padding: 10px;
-            background-color: lightpink;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: rgba(255, 182, 193, 0.822);
-        }
-        #hiddenImage {
-            display: none;
-            margin-top: 20px;
-            max-width: 100%;
-        }
-    </style>
+   <style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        background-color: #f0f0f0;
+    }
+    .container {
+        background-color: white;
+        padding: 40px;
+        border-radius: 15px;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        width: 90%;
+        max-width: 1200px;
+        box-sizing: border-box;
+        text-align: center;
+    }
+    h1, h2, h4 {
+        margin-bottom: 20px;
+        color: #333;
+    }
+    form {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+    }
+    label {
+        font-size: 1.5em;
+        color: #444;
+    }
+    select {
+        font-size: 1.2em;
+        padding: 10px;
+        width: 50%;
+        max-width: 300px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+    button {
+        font-size: 1.2em;
+        padding: 15px 30px;
+        background-color: lightpink;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+    button:hover {
+        background-color: rgba(255, 182, 193, 0.822);
+    }
+    #hiddenImage {
+        display: none;
+        margin-top: 30px;
+        max-width: 100%;
+        border-radius: 10px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+</style>
     <script src="a.js"></script>
 </head>
 <body>
