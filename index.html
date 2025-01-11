@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title></title>
- <style>
+    <title>Key Sequence Example</title>
+    <style>
         body {
             font-family: Arial, sans-serif;
             margin: 0;
-            Padding: 0;
+            padding: 0;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -15,43 +15,26 @@
         }
         .container {
             background-color: white;
-            Padding: 20px;
+            padding: 20px;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            width: 100;
-            max-width: 4000px;
+            width: 100%;
+            max-width: 400px;
             box-sizing: border-box;
-        }
-        h1 {
             text-align: center;
         }
-        form {
-            display: flex;
-            flex-direction: column;
-        }
-        label, select, button {
-            margin-bottom: 10px;
-            font-size: 1.2em;
-        }
-        button {
-            Padding: 10px;
-            background-color: lightpink;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: rgba(255, 182, 193, 0.822);
+        img#hiddenImage {
+            display: none;
+            margin-top: 20px;
+            max-width: 100%;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
         }
     </style>
-
-    <script src="a.js"></script>
 </head>
 <body>
     <div class="container">
         <h1>학년과 반을 선택해주세요</h1>
-        <h2>서버 유지 문제로 2학년만을 대상으로 진행 됩니다</h2>
         <form onsubmit="submitForm(); return false;">
             <label for="grade">학년:</label>
             <select id="grade" name="grade">
@@ -72,26 +55,43 @@
                 <option value="9">9반</option>
             </select>
             <button type="submit">제출</button>
-            <button type="button" class="btn btn-primary active" id="btn" 
-                onclick="document.location.href='https://docs.google.com/file/d/15pnm1nIBo9DoTXJJCK5I-ZNkvpFuLAfb/edit?usp=docslist_api&filetype=msexcel'">급식 열람</button>
         </form>
         <h4>후원 하여 개발에 도움주기 / 토스뱅크 1001-4732-6642</h4>
         <img id="hiddenImage" src="arisuchan.jpg" alt="Hidden Image">
     </div>
     <script>
-        document.addEventListener('DOMContentLoaded', function () { 
+        document.addEventListener('DOMContentLoaded', function () {
             let sequence = ['a', 'r', 'i', 's', 'u', 'c', 'h', 'a', 'n'];
+            let hideSequence = ['h', 'i', 'd', 'e']; // 단어 'hide'를 입력하면 이미지가 숨김
             let currentIndex = 0;
+            let hideIndex = 0;
+
+            // 항상 창이 열릴 때 hiddenImage를 숨깁니다.
+            document.getElementById('hiddenImage').style.display = 'none';
 
             document.addEventListener('keydown', function (event) {
-                if (event.key.toLowerCase() === sequence[currentIndex]) {
+                let key = event.key.toLowerCase();
+
+                // 이미지 보이기 시퀀스 처리
+                if (key === sequence[currentIndex]) {
                     currentIndex++;
                     if (currentIndex === sequence.length) {
                         document.getElementById('hiddenImage').style.display = 'block';
-                        currentIndex = 0; // Reset the sequence after showing the image
+                        currentIndex = 0; // Reset sequence
                     }
                 } else {
-                    currentIndex = 0; // Reset if the sequence is broken
+                    currentIndex = 0; // Reset sequence if incorrect
+                }
+
+                // 이미지 숨기기 시퀀스 처리
+                if (key === hideSequence[hideIndex]) {
+                    hideIndex++;
+                    if (hideIndex === hideSequence.length) {
+                        document.getElementById('hiddenImage').style.display = 'none';
+                        hideIndex = 0; // Reset hide sequence
+                    }
+                } else {
+                    hideIndex = 0; // Reset hide sequence if incorrect
                 }
             });
         });
